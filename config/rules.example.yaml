@@ -1,0 +1,32 @@
+schema_version: 1
+batch_size: 1000
+source_system: service-desk-demo
+reference_time: '2026-01-01T00:00:00Z'
+timeliness_days: 90
+quality_threshold: 0.85
+required_fields:
+  - ticket_id
+  - title
+  - status
+  - priority
+  - requester_email
+  - created_at
+  - updated_at
+status_mapping:
+  new: Open
+  open: Open
+  in progress: In Progress
+  pending: Pending
+  resolved: Resolved
+  closed: Closed
+priority_mapping:
+  low: Low
+  p4: Low
+  medium: Medium
+  p3: Medium
+  high: High
+  p2: High
+  critical: Critical
+  p1: Critical
+allowed_statuses: [Open, In Progress, Pending, Resolved, Closed]
+allowed_priorities: [Low, Medium, High, Critical]
