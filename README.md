@@ -139,7 +139,8 @@ Rejected records keep their source row number, masked raw payload, lineage, and 
 ## Security decisions
 
 - Source files, `.env`, reports, database volumes, and quarantine exports are ignored by Git.
-- Containers run as UID/GID 10001, drop Linux capabilities, use `no-new-privileges`, and place PostgreSQL on an internal network.
+- The runtime image defaults to UID/GID 10001, drops Linux capabilities, uses `no-new-privileges`, and places PostgreSQL on an internal network.
+- Compose maps the tool container to the invoking Linux/WSL UID and GID so bind-mounted data stays writable without root; the image default remains UID/GID 10001.
 - Email addresses become stable SHA-256-derived aliases; phone-like values are replaced before persistence.
 - SQL values use Psycopg parameters. Migrations are checksum protected and serialized with an advisory lock.
 - There are no embedded production passwords. `.env.example` contains a clearly local placeholder that must be changed.

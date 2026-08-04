@@ -4,6 +4,8 @@ set -euo pipefail
 records="${1:-100000}"
 run_stamp="$(date -u +%Y%m%dT%H%M%SZ)"
 result_dir="artifacts/performance/${run_stamp}"
+export PIPELINE_UID="${PIPELINE_UID:-$(id -u)}"
+export PIPELINE_GID="${PIPELINE_GID:-$(id -g)}"
 mkdir -p "$result_dir"
 
 docker compose --profile tools run --rm pipeline generate-demo data/benchmark.parquet \

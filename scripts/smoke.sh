@@ -2,6 +2,8 @@
 set -euo pipefail
 
 records="${1:-100}"
+export PIPELINE_UID="${PIPELINE_UID:-$(id -u)}"
+export PIPELINE_GID="${PIPELINE_GID:-$(id -g)}"
 docker compose --profile tools run --rm pipeline migrate
 docker compose --profile tools run --rm pipeline generate-demo data/smoke.jsonl \
   --format jsonl --records "$records" --invalid-rate 0 --duplicate-rate 0

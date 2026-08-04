@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := help
 .PHONY: help setup lint typecheck test test-unit build up down clean demo run benchmark
+export PIPELINE_UID ?= $(shell id -u)
+export PIPELINE_GID ?= $(shell id -g)
 
 help:
 	@echo "setup lint typecheck test test-unit build up down clean demo run benchmark"

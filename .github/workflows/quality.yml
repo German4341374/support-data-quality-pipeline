@@ -34,12 +34,12 @@ jobs:
       DATABASE_URL: postgresql://pipeline_test:local-ci-password@localhost:5432/support_quality_test
       TEST_DATABASE_URL: postgresql://pipeline_test:local-ci-password@localhost:5432/support_quality_test
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           version: "0.11.7"
           enable-cache: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version-file: .python-version
       - name: Install locked dependencies
@@ -54,7 +54,7 @@ jobs:
         run: uv run pytest --cov=support_data_quality --cov-report=xml --cov-report=term-missing
       - name: Build package
         run: uv build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: coverage-and-package
           path: |
@@ -69,7 +69,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Prepare development environment
         run: cp .env.example .env
       - name: Build and run smoke test

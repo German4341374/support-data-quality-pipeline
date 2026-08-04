@@ -29,6 +29,7 @@ services:
       target: runtime
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-pipeline}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB:-support_quality}
+    user: "${PIPELINE_UID:-10001}:${PIPELINE_GID:-10001}"
     depends_on:
       database:
         condition: service_healthy
