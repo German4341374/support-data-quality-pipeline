@@ -1,0 +1,44 @@
+name: Measured benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      records:
+        description: Number of synthetic records
+        required: true
+        default: "100000"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: measured-benchmark
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate record count
+        env:
+          RECORDS: ${{ inputs.records }}
+        run: test "$RECORDS" -ge 1000 && test "$RECORDS" -le 1000000
+      - name: Prepare isolated environment
+        run: cp .env.example .env
+      - name: Start PostgreSQL
+        run: docker compose up -d database
+      - name: Run measured pipeline benchmark
+        env:
+          RECORDS: ${{ inputs.records }}
+        run: ./scripts/benchmark.sh "$RECORDS"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: measured-performance-${{ github.run_id }}
+          path: artifacts/performance/**
+          if-no-files-found: error
+          retention-days: 30
+      - name: Tear down
+        if: always()
+        run: docker compose --profile tools down --volumes

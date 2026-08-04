@@ -1,0 +1,84 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.4-alpine3.24@sha256:9a8afca54e7861fd90fab5fdf4c42477a6b1cb7d293595148e674e0a3181de15
+        env:
+          POSTGRES_DB: support_quality_test
+          POSTGRES_USER: pipeline_test
+          POSTGRES_PASSWORD: local-ci-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pipeline_test -d support_quality_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgresql://pipeline_test:local-ci-password@localhost:5432/support_quality_test
+      TEST_DATABASE_URL: postgresql://pipeline_test:local-ci-password@localhost:5432/support_quality_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.7"
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - name: Install locked dependencies
+        run: uv sync --all-groups --frozen
+      - name: Check formatting
+        run: uv run ruff format --check src tests
+      - name: Lint
+        run: uv run ruff check src tests
+      - name: Type check
+        run: uv run mypy src
+      - name: Test with PostgreSQL and coverage
+        run: uv run pytest --cov=support_data_quality --cov-report=xml --cov-report=term-missing
+      - name: Build package
+        run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-and-package
+          path: |
+            coverage.xml
+            dist/*
+          if-no-files-found: error
+          retention-days: 14
+
+  container-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare development environment
+        run: cp .env.example .env
+      - name: Build and run smoke test
+        run: |
+          docker compose up -d database
+          ./scripts/smoke.sh 100
+      - name: Print diagnostics on failure
+        if: failure()
+        run: docker compose --profile tools logs --no-color
+      - name: Tear down
+        if: always()
+        run: docker compose --profile tools down --volumes
