@@ -1,0 +1,22 @@
+name: Bug report
+description: Report a reproducible pipeline defect without attaching sensitive data.
+title: "fix: "
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: Use synthetic records and redact paths, URLs, and identifiers.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment
+      description: OS, Python, PostgreSQL, input format, and schema version.
+    validations:
+      required: true
