@@ -10,12 +10,14 @@ mkdir -p "$result_dir"
 
 docker compose --profile tools run --rm pipeline generate-demo data/benchmark.parquet \
   --format parquet --records "$records" --invalid-rate 0.02 --duplicate-rate 0.01
+input_size_bytes="$(wc -c < data/benchmark.parquet | tr -d ' ')"
 docker compose --profile tools run --rm pipeline run data/benchmark.parquet --incremental \
   | tee "$result_dir/command-output.json"
 docker compose exec -T database psql -U "${POSTGRES_USER:-pipeline}" \
   -d "${POSTGRES_DB:-support_quality}" -Atc \
   "SELECT json_build_object('tickets', count(*)) FROM tickets;" \
   > "$result_dir/database-count.json"
-printf '{"records_requested":%s,"measured_at":"%s"}\n' "$records" "$run_stamp" \
+printf '{"records_requested":%s,"input_size_bytes":%s,"measured_at":"%s"}\n' \
+  "$records" "$input_size_bytes" "$run_stamp" \
   > "$result_dir/benchmark-metadata.json"
 echo "Benchmark artifacts: $result_dir"

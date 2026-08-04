@@ -1,0 +1,8 @@
+{
+  "commit_sha": "ad0b1bfbb35edcd3fc6019422d14af8e07528950",
+  "measured_at": "2026-08-04T10:25:42Z",
+  "records_requested": 100000,
+  "runner": "GitHub-hosted ubuntu-24.04",
+  "workflow_run_id": 30900571731,
+  "workflow_url": "https://github.com/German4341374/support-data-quality-pipeline/actions/runs/30900571731"
+}

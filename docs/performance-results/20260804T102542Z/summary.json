@@ -1,0 +1,32 @@
+{
+  "accepted_records": 97152,
+  "batches_committed": 100,
+  "config_hash": "4a79c6accc7be184dd8005a59106cfc366beb86e0e0f1165b168b3462e8b71cc",
+  "dry_run": false,
+  "duplicate_records": 900,
+  "duration_seconds": 58.579877,
+  "incremental": true,
+  "input_format": "parquet",
+  "input_hash": "e5a4f18a952cce0e0b069f4269c7ff06cad21b9b1718631ee6d4eed610b95645",
+  "input_path": "/app/data/benchmark.parquet",
+  "loaded_records": 97152,
+  "quality_dimensions": {
+    "completeness": 0.999317,
+    "consistency": 1.0,
+    "timeliness": 1.0,
+    "uniqueness": 0.991,
+    "validity": 0.98052
+  },
+  "quality_gate_passed": true,
+  "quality_score": 0.994167,
+  "quality_threshold": 0.85,
+  "quarantined_records": 2848,
+  "records_per_second": 1707.07,
+  "report_json": "artifacts/830bef5c-57b1-49c2-afbc-1ff2ba1f5a9b/summary.json",
+  "report_markdown": "artifacts/830bef5c-57b1-49c2-afbc-1ff2ba1f5a9b/summary.md",
+  "resumed_from_offset": 100000,
+  "run_id": "830bef5c-57b1-49c2-afbc-1ff2ba1f5a9b",
+  "status": "COMPLETED",
+  "total_records": 100000,
+  "unchanged_records": 0
+}
