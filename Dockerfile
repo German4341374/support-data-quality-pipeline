@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM python:3.12.13-slim-bookworm AS builder
+FROM python:3.14.0-slim-bookworm AS builder
 
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
@@ -10,7 +10,7 @@ COPY pyproject.toml uv.lock README.md ./
 COPY src ./src
 RUN uv sync --frozen --no-dev
 
-FROM python:3.12.13-slim-bookworm AS runtime
+FROM python:3.14.0-slim-bookworm AS runtime
 
 ENV PATH="/app/.venv/bin:${PATH}" \
     PYTHONUNBUFFERED=1 \
