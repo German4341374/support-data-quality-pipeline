@@ -5,9 +5,9 @@
 [![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A streaming, resumable pipeline that validates Service Desk exports, masks common PII, measures data quality, quarantines rejected rows, and loads trusted records into PostgreSQL. It is designed as a local DevOps/data-engineering portfolio project with deterministic demonstrations and no cloud account.
+A streaming, resumable pipeline for Service Desk exports. It validates schemas and business rules, masks common PII, quarantines rejected rows and loads trusted records into PostgreSQL while keeping enough checkpoint and lineage data to explain every rerun.
 
-## What it demonstrates
+## What is covered
 
 - CSV, JSON Lines, and Parquet ingestion without loading a complete file into memory
 - strict Pydantic schema validation and configurable YAML business rules
@@ -186,7 +186,7 @@ docs/                      architecture, semantics, evolution, and runbooks
 .github/workflows/         quality and manually dispatched benchmark automation
 ```
 
-## Future improvements
+## Next steps
 
 - immutable object-storage inputs with version IDs and seekable checkpoints
 - schema registry plus version-specific adapters
@@ -195,7 +195,7 @@ docs/                      architecture, semantics, evolution, and runbooks
 - configurable retention and quarantine approval workflows
 - OpenTelemetry traces and Prometheus metrics for long-running deployments
 
-## Interview talking points
+## Design questions
 
 1. Why the atomic unit is a batch rather than a full file or individual row.
 2. How an input hash and canonical configuration hash make reruns reproducible.
