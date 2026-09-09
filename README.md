@@ -5,7 +5,12 @@
 [![PostgreSQL 18](https://img.shields.io/badge/PostgreSQL-18-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A streaming, resumable pipeline for Service Desk exports. It validates schemas and business rules, masks common PII, quarantines rejected rows and loads trusted records into PostgreSQL while keeping enough checkpoint and lineage data to explain every rerun.
+Check a Service Desk export before loading it into PostgreSQL. The pipeline reads CSV,
+JSON Lines, or Parquet in batches, cleans up values, checks the rules, and sets rejected
+rows aside for review.
+
+It also masks common personal data and saves checkpoints, so a failed import can resume.
+Reports show what was accepted, what was rejected, and where each batch came from.
 
 ## What is covered
 
